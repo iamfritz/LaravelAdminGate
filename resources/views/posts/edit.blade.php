@@ -20,7 +20,7 @@
                     <div class="card-header">{{ __('Edit Post') }}</div>
                     <div class="card-body">
                         <div class="float-end mb-2">
-                            <a class="btn btn-primary btn-sm" href="{{ route('posts.index') }}"> Back</a>
+                            <a class="btn btn-secondary btn-sm" href="{{ route('posts.index') }}"> Back</a>
                         </div>                        
                         <form action="{{ route('posts.update',$post->id) }}" method="POST">
                             @csrf

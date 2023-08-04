@@ -9,7 +9,7 @@
                     <div class="card-header">{{ __('Show Post') }}</div>
                     <div class="card-body">
                         <div class="float-end mb-2">
-                            <a class="btn btn-primary btn-sm" href="{{ route('posts.index') }}"> Back</a>
+                            <a class="btn btn-secondary btn-sm" href="{{ route('posts.index') }}"> Back</a>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">

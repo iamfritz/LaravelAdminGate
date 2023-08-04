@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -42,9 +43,19 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'required',
         ]);
-    
-        Post::create($request->all());
-     
+
+        #$postData = $request->only(['title', 'description']);
+        #$post     = Post::create($postData);
+        
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+
+        // Get the authenticated user and associate the post with the user
+        $user = auth()->user();
+        $post->user()->associate($user);
+        $post->save();
+
         return redirect()->route('posts.index')
                         ->with('success','Post created successfully.');
     }
@@ -57,7 +68,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show',compact('post'));
+        $response = Gate::inspect('view', $post);
+        if ($response->allowed()) {
+            #echo 'The action is authorized...';
+            return view('posts.show',compact('post'));
+        } else {
+            //echo $response->message();
+            //abort(403, 'Unauthorized action.');
+            abort(403, $response->message());
+        }                
     }
 
     /**
@@ -80,6 +99,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        
+        if (! Gate::allows('update-post', $post)) {
+            abort(403);
+        }
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',

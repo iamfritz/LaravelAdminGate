@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
+use App\Policies\PostPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Post::class => PostPolicy::class,
     ];
 
     /**
@@ -26,5 +29,35 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('update-post', function (User $user, Post $post) {
+            return $user->id === $post->user_id;
+        });        
+
+        /* Gate::define('create-post', function (User $user, Category $category, $pinned) {
+            if (! $user->canPublishToGroup($category->group)) {
+                return false;
+            } elseif ($pinned && ! $user->canPinPosts()) {
+                return false;
+            }
+        
+            return true;
+        });
+        
+        if (Gate::check('create-post', [$category, $pinned])) {
+            // The user can create the post...
+        } */      
+        
+        /* Gate::define('edit-settings', function (User $user) {
+            return $user->isAdmin
+                        ? Response::allow()
+                        : Response::deny('You must be an administrator.');
+        });
+        before or after 
+        Gate::before(function ($user, $ability) {
+            if ($user->isAdministrator()) {
+                return true;
+            }
+        });        
+        */
     }
 }
