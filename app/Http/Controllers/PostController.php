@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,6 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
+
         $data = Post::latest()->paginate(5);
     
         return view('posts.index',compact('data'))

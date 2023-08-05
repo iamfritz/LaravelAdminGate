@@ -56,6 +56,9 @@
                                 <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                             </li>  
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
+                            </li> 
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('posts.index') }}">{{ __('Post') }}</a>
                             </li>                        
                             <li class="nav-item dropdown">
