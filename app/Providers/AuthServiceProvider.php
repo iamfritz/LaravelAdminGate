@@ -28,10 +28,27 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('admin', function ($user) {
+            return $user->hasRole('admin');
+        });
+
+        Gate::define('author', function ($user) {
+            return $user->hasRole('author');
+        });
+
+        #Gate::define('update-post', [PostPolicy::class, 'view']);
+        #Gate::define('delete-post', [PostPolicy::class, 'delete']);
+        
         //
-        Gate::define('update-post', function (User $user, Post $post) {
+        /* Gate::any(['update-post', 'delete-post'], function (User $user, Post $post) {
             return $user->id === $post->user_id;
-        });        
+        }); */            
+
+        
+        /* Gate::any(['view-post'], function (User $user, Post $post) {
+            return $user->id === $post->user_id;
+        }); */
+               
 
         /* Gate::define('create-post', function (User $user, Category $category, $pinned) {
             if (! $user->canPublishToGroup($category->group)) {

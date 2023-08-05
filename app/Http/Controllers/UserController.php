@@ -30,7 +30,7 @@ class UserController extends Controller
         if(auth()->check()){
             $user = auth()->user();
         }        
-        return view('home');
+        return view('home',compact('user'));
     }
 
     /**
@@ -117,7 +117,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
-    {
+    {       
         $roles = Role::all();
         return view('users.edit',compact('user', 'roles'));
     }
@@ -131,10 +131,6 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        
-        /* if (! Gate::allows('update-post', $post)) {
-            abort(403);
-        } */
 
         $request->validate([
             'name'  => 'required',
@@ -171,9 +167,15 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        if (Gate::allows('admin')) {
+
+            $user->delete();
+                    
+            return redirect()->route('users.index')
+                            ->with('success','User deleted successfully');
+        } else {
+            abort(403, 'No Access.');            
+        }
     
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
     }
 }

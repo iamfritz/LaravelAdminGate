@@ -31,7 +31,10 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-
+        
+        return $user->id === $post->user_id
+                    ? Response::allow()
+                    : Response::deny('You do not own this post.');
     }
 
     /**
@@ -82,7 +85,9 @@ class PostPolicy
      */
     public function restore(User $user, Post $post)
     {
-        //
+        return $user->id === $post->user_id
+                    ? Response::allow()
+                    : Response::deny('You do not own this post.');
     }
 
     /**
@@ -94,6 +99,8 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post)
     {
-        //
+        return $user->id === $post->user_id
+                    ? Response::allow()
+                    : Response::deny('You do not own this post.');
     }
 }

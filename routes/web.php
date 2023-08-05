@@ -22,6 +22,6 @@ Auth::routes(['register' => false]);
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/dashboard', [App\Http\Controllers\UserController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/dashboard', [App\Http\Controllers\UserController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');
 Route::resource('posts', PostController::class)->middleware('auth');

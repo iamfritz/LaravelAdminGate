@@ -69,8 +69,8 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
-    {
-        $response = Gate::inspect('view', $post);
+    {           
+        $response = Gate::inspect('view', $post); // connected to Post Policy
         if ($response->allowed()) {
             #echo 'The action is authorized...';
             return view('posts.show',compact('post'));
@@ -89,6 +89,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if (! Gate::allows('update-post', $post)) {
+            abort(403);
+        }        
         return view('posts.edit',compact('post'));
     }
 
@@ -125,9 +128,14 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
-    
-        return redirect()->route('posts.index')
-                        ->with('success','Post deleted successfully');
+        if (Gate::allows('admin')) {
+
+            $post->delete();
+        
+            return redirect()->route('posts.index')
+                            ->with('success','Post deleted successfully');
+        } else {
+            abort(403, $response->message());            
+        }        
     }
 }
