@@ -56,5 +56,9 @@ class User extends Authenticatable
     {
         return $this->roles->pluck('name')->contains($roleName);
     }
+    public function hasAdminAuthor()
+    {    
+        return $this->roles->pluck('name')->whereIn('name',['admin', 'author'])->count() > 0;
+    }
 
 }

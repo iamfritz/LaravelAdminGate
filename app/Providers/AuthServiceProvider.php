@@ -30,11 +30,22 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('admin', function ($user) {
             return $user->hasRole('admin');
-        });
+        }); /* use if (Gate::allows('admin')) {} */
 
         Gate::define('author', function ($user) {
             return $user->hasRole('author');
         });
+
+        Gate::define('admin-or-author', function ($user) {
+            return $user->hasRole('admin') || $user->hasRole('author');
+        }); /* if (Gate::denies('admin-or-author')) { abort(403, 'Unauthorized action.'); } */
+
+        Gate::define('view-post', function ($user, $post) {
+            return ( ($user->hasRole('admin') || $user->hasRole('author'))
+                ||
+                $user->id === $post->user_id );
+            
+        });        
 
         #Gate::define('update-post', [PostPolicy::class, 'view']);
         #Gate::define('delete-post', [PostPolicy::class, 'delete']);

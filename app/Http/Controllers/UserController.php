@@ -53,6 +53,10 @@ class UserController extends Controller
      */
     public function create()
     {
+        if (Gate::denies('admin')) {
+            abort(403, "You don't have permission to access.");
+        }
+
         $roles = Role::all();
         return view('users.create',compact('roles'));
     }
@@ -65,6 +69,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if (Gate::denies('admin')) {
+            abort(403, "You don't have permission to access.");
+        }
+
          $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -98,16 +106,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.show',compact('user'));
-        $response = Gate::inspect('view', $user);
-        if ($response->allowed()) {
-            #echo 'The action is authorized...';
-            return view('users.show',compact('user'));
-        } else {
-            //echo $response->message();
-            //abort(403, 'Unauthorized action.');
-            abort(403, $response->message());
-        }                
+        return view('users.show',compact('user'));              
     }
 
     /**
@@ -118,6 +117,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {       
+        if (Gate::denies('admin')) {
+            abort(403, "You don't have permission to access.");
+        }
         $roles = Role::all();
         return view('users.edit',compact('user', 'roles'));
     }
@@ -131,7 +133,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
+        if (Gate::denies('admin')) {
+            abort(403, "You don't have permission to access.");
+        }
         $request->validate([
             'name'  => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -167,15 +171,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if (Gate::allows('admin')) {
-
-            $user->delete();
+        if (Gate::denies('admin')) {
+            abort(403, "You don't have permission to access.");
+        }
+        $user->delete();
                     
             return redirect()->route('users.index')
                             ->with('success','User deleted successfully');
-        } else {
-            abort(403, 'No Access.');            
-        }
     
     }
 }

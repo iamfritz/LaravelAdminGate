@@ -31,10 +31,12 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        
-        return $user->id === $post->user_id
-                    ? Response::allow()
-                    : Response::deny('You do not own this post.');
+        /* return ( ($user->hasRole('admin') || $user->hasRole('author'))
+                ||
+                $user->id === $post->user_id ) ? 
+                    Response::allow()
+                :
+                    Response::deny("You don't have permission to access."); */        
     }
 
     /**
@@ -45,7 +47,11 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        //
+        #return $user->hasAdminAuthor();
+        return ($user->hasRole('admin') || $user->hasRole('author')) ?
+                Response::allow()
+                    :
+                    Response::deny("You don't have permission to access.");
     }
 
     /**
@@ -57,9 +63,12 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->user_id
-                    ? Response::allow()
-                    : Response::deny('You do not own this post.');
+        return ( ($user->hasRole('admin') || $user->hasRole('author'))
+                ||
+                $user->id === $post->user_id ) ? 
+                    Response::allow()
+                :
+                    Response::deny("You don't have permission to access.");
     }
 
     /**
@@ -71,9 +80,12 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->id === $post->user_id
-                    ? Response::allow()
-                    : Response::deny('You do not own this post.');
+        return ( ($user->hasRole('admin') || $user->hasRole('author'))
+                ||
+                $user->id === $post->user_id ) ? 
+                    Response::allow()
+                :
+                    Response::deny("You don't have permission to access.");
     }
 
     /**

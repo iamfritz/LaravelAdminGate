@@ -30,6 +30,8 @@ class PostController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Post::class);
+
         return view('posts.create');
     }
 
@@ -41,6 +43,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Post::class);
+
          $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -69,16 +73,21 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
-    {           
-        $response = Gate::inspect('view', $post); // connected to Post Policy
-        if ($response->allowed()) {
-            #echo 'The action is authorized...';
-            return view('posts.show',compact('post'));
-        } else {
-            //echo $response->message();
-            //abort(403, 'Unauthorized action.');
+    {    
+        /* authorize using policy 
+        $this->authorize('view', $post);
+        $response = Gate::inspect('view', $post);
+        if (!$response->allowed()) {
             abort(403, $response->message());
-        }                
+        }
+        */
+
+        /* authorize using gate
+        if (Gate::denies('view-post', $post)) {
+            abort(403, "You don't have permission to access.");
+        }   
+        */
+        return view('posts.show',compact('post'));                    
     }
 
     /**
@@ -89,9 +98,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        if (! Gate::allows('update-post', $post)) {
-            abort(403);
-        }        
+        $this->authorize('update', $post);
+
         return view('posts.edit',compact('post'));
     }
 
@@ -105,9 +113,7 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         
-        if (! Gate::allows('update-post', $post)) {
-            abort(403);
-        }
+        $this->authorize('update', $post);
 
         $request->validate([
             'title' => 'required',
@@ -128,14 +134,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if (Gate::allows('admin')) {
+        $this->authorize('delete', $post);
 
-            $post->delete();
-        
-            return redirect()->route('posts.index')
-                            ->with('success','Post deleted successfully');
-        } else {
-            abort(403, $response->message());            
-        }        
+        $post->delete();
+    
+        return redirect()->route('posts.index')
+                        ->with('success','Post deleted successfully');
     }
 }
