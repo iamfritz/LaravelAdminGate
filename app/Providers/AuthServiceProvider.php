@@ -36,9 +36,14 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole('author');
         });
 
+        Gate::define('user', function ($user) {
+            return $user->hasRole('user');
+        });
+
         Gate::define('admin-or-author', function ($user) {
             return $user->hasRole('admin') || $user->hasRole('author');
         }); /* if (Gate::denies('admin-or-author')) { abort(403, 'Unauthorized action.'); } */
+        
 
         Gate::define('view-post', function ($user, $post) {
             return ( ($user->hasRole('admin') || $user->hasRole('author'))

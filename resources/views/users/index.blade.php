@@ -9,7 +9,6 @@
             <p class="mb-0">{{ $message }}</p>
         </div>
     @endif
-
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
@@ -41,11 +40,13 @@
                             </td>
                             <td class="text-center">
                                 <form action="{{ route('users.destroy',$value->id) }}" method="POST">   
-                                    <a class="btn btn-info btn-sm" href="{{ route('users.show',$value->id) }}">Show</a>    
-                                    <a class="btn btn-primary btn-sm" href="{{ route('users.edit',$value->id) }}">Edit</a>   
-                                    @csrf
-                                    @method('DELETE')      
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
+                                    <a class="btn btn-info btn-sm" href="{{ route('users.show',$value->id) }}">Show</a>
+                                    @can('admin')
+                                        <a class="btn btn-primary btn-sm" href="{{ route('users.edit',$value->id) }}">Edit</a>   
+                                        @csrf
+                                        @method('DELETE')      
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
+                                    @endcan
                                 </form>
                             </td>
                         </tr>
