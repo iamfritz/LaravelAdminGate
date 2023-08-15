@@ -52,7 +52,7 @@
                         </tr>
                         @endforeach
                     </table>  
-                    {!! $data->links() !!}      
+                    <div class="mt-5">{!! $data->links() !!}</div>
                 </div>
             </div>
         </div>

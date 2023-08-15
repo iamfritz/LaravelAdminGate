@@ -58,9 +58,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
                             </li> 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('posts.index') }}">{{ __('Post') }}</a>
-                            </li>                        
+                            <li class="nav-item dropdown">                                
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ __('Post') }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link" href="{{ route('posts.index') }}">{{ __('Posts') }}</a>
+                                    <a class="nav-link" href="{{ route('category.index') }}">{{ __('Categories') }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item">Post Module</a>
+                                </div>
+                            </li>                                                
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}

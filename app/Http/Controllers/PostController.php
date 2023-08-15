@@ -119,8 +119,9 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'required',
         ]);
-    
-        $post->update($request->all());
+        
+        $postData = $request->only(['title']);
+        $post->update($postData);
     
         return redirect()->route('posts.index')
                         ->with('success','Post updated successfully');

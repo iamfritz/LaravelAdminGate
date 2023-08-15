@@ -6,7 +6,7 @@ use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
-|--------------------------------------------------------------------------
+#|--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
@@ -25,3 +25,4 @@ Auth::routes(['register' => false]);
 Route::get('/dashboard', [App\Http\Controllers\UserController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');
 Route::resource('posts', PostController::class)->middleware('auth');
+Route::resource('category', App\Http\Controllers\CategoryController::class)->middleware('auth');
