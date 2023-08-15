@@ -23,13 +23,11 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Roles:</strong>
-                                    <ul>
-                                        @forelse ($user->roles as $role)
-                                            <li>{{ $role->name }}</li>
-                                        @empty
-                                            <li>No roles assigned.</li>
-                                        @endforelse    
-                                    </ul>
+                                    @forelse ($user->roles as $role)
+                                        <span class="badge text-bg-success">{{ $role->name }}</span>
+                                    @empty
+                                        <span class="badge text-bg-light">No role assigned.</span>
+                                    @endforelse    
                                 </div>
                             </div>
                         </div>

@@ -24,6 +24,18 @@
                                     {{ $post->description }}
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <strong>Category:</strong>
+                                    <div>
+                                        @forelse ($post->categories as $category)
+                                            <span class="badge text-bg-info">{{ $category->title }}</span>
+                                        @empty
+                                            <span class="badge text-bg-light">No category assigned.</span>
+                                        @endforelse    
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

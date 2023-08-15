@@ -64,8 +64,9 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show($id)
     {    
+        $category = Category::withCount('posts')->find($id);
         return view('category.show',compact('category'));                    
     }
 

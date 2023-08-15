@@ -27,16 +27,23 @@
                             <th>Details</th>
                             <th width="280px">Action</th>
                         </tr>
-                        @foreach ($data as $key => $value)
+                        @foreach ($posts as $key => $post)
                         <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $value->user->name }}</td>
-                            <td>{{ $value->title }}</td>
-                            <td>{{ \Str::limit($value->description, 100) }}</td>
+                            <td>{{ $post->user->name }}</td>
+                            <td>{{ $post->title }}</td>
+                            <td>
+                                @forelse ($post->categories as $category)
+                                    <span class="badge text-bg-info">{{ $category->title }}</span>
+                                @empty
+                                    <span class="badge text-bg-light">No category assigned.</span>
+                                @endforelse                                   
+                            </td>
+                            <td>{{ \Str::limit($post->description, 100) }}</td>
                             <td class="text-center">
-                                <form action="{{ route('posts.destroy',$value->id) }}" method="POST">   
-                                    <a class="btn btn-info btn-sm" href="{{ route('posts.show',$value->id) }}">Show</a>    
-                                    <a class="btn btn-primary btn-sm" href="{{ route('posts.edit',$value->id) }}">Edit</a>   
+                                <form action="{{ route('posts.destroy',$post->id) }}" method="POST">   
+                                    <a class="btn btn-info btn-sm" href="{{ route('posts.show',$post->id) }}">Show</a>    
+                                    <a class="btn btn-primary btn-sm" href="{{ route('posts.edit',$post->id) }}">Edit</a>   
                                     @csrf
                                     @method('DELETE')      
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
@@ -45,7 +52,11 @@
                         </tr>
                         @endforeach
                     </table>  
-                    <div class="mt-5">{!! $data->links() !!}</div>
+                    <div class="mt-5">
+                        <div class="custom-pagination">
+                            {{ $posts->links('pagination.custom') }}
+                        </div>                        
+                    </div>
                 </div>
             </div>
         </div>

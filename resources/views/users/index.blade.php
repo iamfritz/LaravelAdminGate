@@ -26,23 +26,23 @@
                             <th>Roles</th>
                             <th width="280px">Action</th>
                         </tr>
-                        @foreach ($data as $key => $value)
+                        @foreach ($users as $key => $user)
                         <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $value->name }}</td>
-                            <td>{{ $value->email }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
                             <td>
-                                @forelse ($value->roles as $role)
-                                    <li>{{ $role->name }}</li>
+                                @forelse ($user->roles as $role)
+                                    <span class="badge text-bg-success">{{ $role->name }}</span>
                                 @empty
-                                    <li>No roles assigned.</li>
+                                    <span class="badge text-bg-light">No role assigned.</span>
                                 @endforelse                                  
                             </td>
                             <td class="text-center">
-                                <form action="{{ route('users.destroy',$value->id) }}" method="POST">   
-                                    <a class="btn btn-info btn-sm" href="{{ route('users.show',$value->id) }}">Show</a>
+                                <form action="{{ route('users.destroy',$user->id) }}" method="POST">   
+                                    <a class="btn btn-info btn-sm" href="{{ route('users.show',$user->id) }}">Show</a>
                                     @can('admin')
-                                        <a class="btn btn-primary btn-sm" href="{{ route('users.edit',$value->id) }}">Edit</a>   
+                                        <a class="btn btn-primary btn-sm" href="{{ route('users.edit',$user->id) }}">Edit</a>   
                                         @csrf
                                         @method('DELETE')      
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
@@ -52,7 +52,11 @@
                         </tr>
                         @endforeach
                     </table>  
-                    <div class="mt-5">{!! $data->links() !!}</div>
+                    <div class="mt-5">
+                        <div class="custom-pagination">
+                            {{ $users->links('pagination.custom') }}
+                        </div>                        
+                    </div>
                 </div>
             </div>
         </div>

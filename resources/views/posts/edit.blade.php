@@ -39,6 +39,20 @@
                                         <textarea class="form-control" style="height:150px" name="description" placeholder="Detail">{{ $post->description }}</textarea>
                                     </div>
                                 </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>Categories:</strong>                                     
+                                    </div>
+                                    <div class="form-group">
+                                        @foreach($categories as $category)
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="category[]" value="{{ $category->id }}" {{ in_array($category->id, $post->categories->pluck('id')->toArray()) ? 'checked' : '' }} /> {{ $category->title }}
+                                                </label>
+                                            </div>                                            
+                                        @endforeach                                        
+                                    </div>                                    
+                                </div>                                 
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center mt-4">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>

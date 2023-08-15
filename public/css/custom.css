@@ -1,0 +1,23 @@
+.custom-pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.custom-pagination li {
+    margin: 0 5px;
+}
+
+.custom-pagination li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.custom-pagination li.active span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.custom-pagination svg{
+    height: 50px;
+}

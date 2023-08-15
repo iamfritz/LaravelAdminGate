@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Role;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -17,9 +18,9 @@ class PostController extends Controller
     public function index()
     {
 
-        $data = Post::latest()->paginate(5);
+        $posts = Post::latest()->paginate(5);
     
-        return view('posts.index',compact('data'))
+        return view('posts.index',compact('posts'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -32,7 +33,9 @@ class PostController extends Controller
     {
         $this->authorize('create', Post::class);
 
-        return view('posts.create');
+        $categories = Category::get();
+
+        return view('posts.create', compact('categories'));
     }
 
     /**
@@ -61,6 +64,12 @@ class PostController extends Controller
         $user = auth()->user();
         $post->user()->associate($user);
         $post->save();
+
+        $inputCategory = $request->input('category');
+        if($inputCategory) {
+            $categories = Category::whereIn('id', $inputCategory)->get();
+            $post->categories()->sync($categories);        
+        }
 
         return redirect()->route('posts.index')
                         ->with('success','Post created successfully.');
@@ -99,8 +108,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $this->authorize('update', $post);
+        $categories = Category::get();
 
-        return view('posts.edit',compact('post'));
+        return view('posts.edit',compact('post', 'categories'));
     }
 
     /**
@@ -120,8 +130,14 @@ class PostController extends Controller
             'description' => 'required',
         ]);
         
-        $postData = $request->only(['title']);
+        $postData = $request->only(['title', 'description']);
         $post->update($postData);
+
+        $inputCategory = $request->input('category');
+        if($inputCategory) {
+            $categories = Category::whereIn('id', $inputCategory)->get();
+            $post->categories()->sync($categories);        
+        }        
     
         return redirect()->route('posts.index')
                         ->with('success','Post updated successfully');
