@@ -8,8 +8,16 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
+use App\Services\CategoryService;
+
 class CategoryController extends Controller
 {
+    protected $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }    
     /**
      * Display a listing of the resource.
      *
@@ -17,10 +25,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $paginate = 5;
+        $data = $this->categoryService->latestwithPostCount($paginate);
 
-        $data = Category::latest()->withCount('posts')->paginate(5);
         return view('category.index',compact('data'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+            ->with('i', (request()->input('page', 1) - 1) * $paginate);
     }
 
     /**
@@ -49,10 +58,8 @@ class CategoryController extends Controller
             'title' => ['required', 'string', 'max:255', 'unique:categories'],
         ]);
         
-        $category = new Category();
-        $category->title = $request->input('title');
-
-        $category->save();
+        $catData = $request->only(['title']);
+        $this->categoryService->create($catData);        
 
         return redirect()->route('category.index')
                         ->with('success','Category created successfully.');
@@ -66,7 +73,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {    
-        $category = Category::withCount('posts')->find($id);
+        $category = $this->categoryService->findwithPostCount($id);
         return view('category.show',compact('category'));                    
     }
 
@@ -97,8 +104,10 @@ class CategoryController extends Controller
 
         $request->validate([
             'title' => 'required|max:255|unique:categories,title,' . $category->id
-        ]);    
-        $category->update($request->all());
+        ]);
+        $catData = $request->only(['title']);
+
+        $this->categoryService($catData);
     
         return redirect()->route('category.index')
                         ->with('success','Category updated successfully');
@@ -114,7 +123,7 @@ class CategoryController extends Controller
     {
         //$this->authorize('delete', $category);
 
-        $category->delete();
+        $this->categoryService->delete($category);
     
         return redirect()->route('category.index')
                         ->with('success','Category deleted successfully');
