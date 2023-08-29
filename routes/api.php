@@ -17,3 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('v1')->group(function () {
+    Route::apiResource('posts', App\Http\Controllers\Api\PostApiController::class);
+    Route::apiResource('category', App\Http\Controllers\Api\PostApiController::class);
+    Route::apiResource('users', App\Http\Controllers\Api\PostApiController::class);
+    Route::apiResource('roles', App\Http\Controllers\Api\PostApiController::class);
+});

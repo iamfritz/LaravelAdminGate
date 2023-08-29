@@ -1,26 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-
 use App\Services\PostService;
-use App\Services\CategoryService;
 
-class PostController extends Controller
+class PostApiController extends Controller
 {
     protected $postService;
-    protected $categoryService;
 
-    public function __construct(PostService $postService, CategoryService $categoryService)
+    public function __construct(PostService $postService)
     {
         $this->postService = $postService;
-        $this->categoryService = $categoryService;
-    }     
+    }
     /**
      * Display a listing of the resource.
      *
@@ -29,11 +27,10 @@ class PostController extends Controller
     public function index()
     {
 
-        $paginate = 5;
-        $posts = $this->postService->latest($paginate);
+        #$posts = Post::latest()->paginate(5);
+        $posts = $this->postService->all();
     
-        return view('posts.index',compact('posts'))
-            ->with('i', (request()->input('page', 1) - 1) * $paginate);
+        return response()->json($posts);
     }
 
     /**
@@ -45,7 +42,7 @@ class PostController extends Controller
     {
         $this->authorize('create', Post::class);
 
-        $categories = $this->categoryService->all();
+        $categories = Category::get();
 
         return view('posts.create', compact('categories'));
     }
@@ -65,14 +62,21 @@ class PostController extends Controller
             'description' => 'required',
         ]);
 
+        #$postData = $request->only(['title', 'description']);
+        #$post     = Post::create($postData);
+        
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
 
-        $postData = $request->only(['title', 'description']);
+        // Get the authenticated user and associate the post with the user
         $user = auth()->user();
-        $post = $this->postService->createWithAuthor($user, $postData);
+        $post->user()->associate($user);
+        $post->save();
 
         $inputCategory = $request->input('category');
         if($inputCategory) {
-            $categories = $this->categoryService->whereInField('id', $inputCategory);
+            $categories = Category::whereIn('id', $inputCategory)->get();
             $post->categories()->sync($categories);        
         }
 
@@ -101,7 +105,6 @@ class PostController extends Controller
             abort(403, "You don't have permission to access.");
         }   
         */
-        //$post = $this->postService->find($id);
         return view('posts.show',compact('post'));                    
     }
 
@@ -114,7 +117,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $this->authorize('update', $post);
-        $categories = $this->categoryService->all();
+        $categories = Category::get();
 
         return view('posts.edit',compact('post', 'categories'));
     }
@@ -137,11 +140,11 @@ class PostController extends Controller
         ]);
         
         $postData = $request->only(['title', 'description']);
-        $post = $this->postService->update($post, $postData);
+        $post->update($postData);
 
         $inputCategory = $request->input('category');
         if($inputCategory) {
-            $categories = $this->categoryService->whereInField('id', $inputCategory);
+            $categories = Category::whereIn('id', $inputCategory)->get();
             $post->categories()->sync($categories);        
         }        
     
@@ -158,8 +161,8 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
+
         $post->delete();
-        //$this->postService->delete($post);
     
         return redirect()->route('posts.index')
                         ->with('success','Post deleted successfully');

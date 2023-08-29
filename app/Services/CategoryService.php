@@ -23,4 +23,9 @@ class CategoryService extends BaseService
         return $this->model->latest()->withCount('posts')->paginate($paginate);
     }
 
+    public function whereInField($field, $values)
+    {
+        return $this->model->whereIn($field, $values)->get();
+    }
+
 }

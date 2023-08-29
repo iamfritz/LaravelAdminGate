@@ -8,15 +8,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
+use App\Services\UserService;
+use App\Services\RoleService;
+
 class UserController extends Controller
 {
+    protected $userService;
+    protected $roleService;
+    
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserService $userService, RoleService $roleService)
     {
+        $this->userService = $userService;
+        $this->roleService = $roleService;
         //$this->middleware('auth');
     }
 
@@ -41,9 +49,11 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = User::latest()->paginate(5);
+        $paginate = 5;
+        $users = $this->userService->latest($paginate);
+
         return view('users.index',compact('users'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+            ->with('i', (request()->input('page', 1) - 1) * $paginate);
     }
 
     /**
@@ -57,7 +67,7 @@ class UserController extends Controller
             abort(403, "You don't have permission to access.");
         }
 
-        $roles = Role::all();
+        $roles = $this->roleService->all();
         return view('users.create',compact('roles'));
     }
 
@@ -80,15 +90,13 @@ class UserController extends Controller
             'roles' => 'required|array'
         ]);
 
-        
-        $user = new User();
-        $user->name     = $request->input('name');
-        $user->email    = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
+        $userData = $request->only(['name', 'email', 'password']);
+        $userData['password'] = Hash::make($request->input('password'));
+        $user = $this->userService->create($userData);
+
         
         $inputRoles    = $request->input('roles');
-        $roles = Role::whereIn('id', $inputRoles)->get();
+        $roles = $this->roleService->whereInField('id', $inputRoles);
 
         // Assign the role to the user
         $user->roles()->sync($roles);
@@ -120,7 +128,7 @@ class UserController extends Controller
         if (Gate::denies('admin')) {
             abort(403, "You don't have permission to access.");
         }
-        $roles = Role::all();
+        $roles = $this->roleService->all();
         return view('users.edit',compact('user', 'roles'));
     }
 
@@ -142,19 +150,16 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:8'],
             'roles' => 'required|array'
         ]);
-        
-        $postData       = array(); 
-        $postData['name']     = $request->input('name');
-        $postData['email']    = $request->input('email');
+
+        $userData = $request->only(['name', 'email']);
         
         if($request->input('password')){
-            $postData['password'] = Hash::make($request->input('password'));
+            $userData['password'] = Hash::make($request->input('password'));
         }
-                
-        $user->update($postData);
+        $user = $this->userService->update($user, $userData);
 
         $inputRoles    = $request->input('roles');
-        $roles = Role::whereIn('id', $inputRoles)->get();
+        $roles = $this->roleService->whereInField('id', $inputRoles);
 
         // Assign the role to the user
         $user->roles()->sync($roles);        
@@ -174,7 +179,8 @@ class UserController extends Controller
         if (Gate::denies('admin')) {
             abort(403, "You don't have permission to access.");
         }
-        $user->delete();
+        //$user->delete();
+        $this->userService->delete($user);
                     
             return redirect()->route('users.index')
                             ->with('success','User deleted successfully');

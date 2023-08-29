@@ -59,7 +59,7 @@ class CategoryController extends Controller
         ]);
         
         $catData = $request->only(['title']);
-        $this->categoryService->create($catData);        
+        $this->categoryService->create($catData);
 
         return redirect()->route('category.index')
                         ->with('success','Category created successfully.');
@@ -107,7 +107,7 @@ class CategoryController extends Controller
         ]);
         $catData = $request->only(['title']);
 
-        $this->categoryService($catData);
+        $this->categoryService->update($catData);
     
         return redirect()->route('category.index')
                         ->with('success','Category updated successfully');
