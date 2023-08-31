@@ -85,7 +85,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //$this->authorize('update', $category);
+        $this->authorize('create', Post::class);
 
         return view('category.edit',compact('category'));
     }
@@ -101,6 +101,7 @@ class CategoryController extends Controller
     {
         
         //$this->authorize('update', $category);
+        $this->authorize('create', Post::class);
 
         $request->validate([
             'title' => 'required|max:255|unique:categories,title,' . $category->id
@@ -121,7 +122,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //$this->authorize('delete', $category);
+        $this->authorize('create', Post::class);
 
         $this->categoryService->delete($category);
     
