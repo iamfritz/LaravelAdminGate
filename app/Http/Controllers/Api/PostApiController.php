@@ -10,15 +10,24 @@ use App\Models\Role;
 use App\Models\Category;
 use Illuminate\Support\Facades\Gate;
 use App\Services\PostService;
+use App\Services\CategoryService;
 
 class PostApiController extends Controller
 {
     protected $postService;
+    protected $categoryService;
+    protected $apiData;
 
-    public function __construct(PostService $postService)
+    public function __construct(PostService $postService, CategoryService $categoryService)
     {
         $this->postService = $postService;
-    }
+        $this->categoryService = $categoryService;
+        $this->apiData = [
+                    "status"    => "error",
+                    "message"   => "",
+                    "data"      => [] 
+                ];
+    }     
     /**
      * Display a listing of the resource.
      *
@@ -27,24 +36,10 @@ class PostApiController extends Controller
     public function index()
     {
 
-        #$posts = Post::latest()->paginate(5);
-        $posts = $this->postService->all();
-    
+        $paginate = 5;
+        $posts = $this->postService->latest($paginate);
+        
         return response()->json($posts);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $this->authorize('create', Post::class);
-
-        $categories = Category::get();
-
-        return view('posts.create', compact('categories'));
     }
 
     /**
@@ -62,26 +57,26 @@ class PostApiController extends Controller
             'description' => 'required',
         ]);
 
-        #$postData = $request->only(['title', 'description']);
-        #$post     = Post::create($postData);
+
+        $postData = $request->only(['title', 'description']);
+        $user = auth()->user(); //auth user
+        $post = $this->postService->createWithAuthor($user, $postData);
+
+        if($post) {
+
+            $inputCategory = $request->input('category');
+            if($inputCategory) {
+                $categories = $this->categoryService->whereInField('id', $inputCategory);
+                $post->categories()->sync($categories);        
+            }       
         
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->description = $request->input('description');
-
-        // Get the authenticated user and associate the post with the user
-        $user = auth()->user();
-        $post->user()->associate($user);
-        $post->save();
-
-        $inputCategory = $request->input('category');
-        if($inputCategory) {
-            $categories = Category::whereIn('id', $inputCategory)->get();
-            $post->categories()->sync($categories);        
+            $this->apiData["status"] = "success"; 
+            $this->apiData["message"] = 'Post updated successfully'; 
+            $this->apiData["data"] = $post; 
+        
+        } else {
+            $this->apiData["message"] = 'Error in deleting record.'; 
         }
-
-        return redirect()->route('posts.index')
-                        ->with('success','Post created successfully.');
     }
 
     /**
@@ -91,35 +86,13 @@ class PostApiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
-    {    
-        /* authorize using policy 
-        $this->authorize('view', $post);
-        $response = Gate::inspect('view', $post);
-        if (!$response->allowed()) {
-            abort(403, $response->message());
+    {   
+        if($post) {
+            $this->apiData["status"] = "success"; 
+            $this->apiData["data"] = $post; 
         }
-        */
 
-        /* authorize using gate
-        if (Gate::denies('view-post', $post)) {
-            abort(403, "You don't have permission to access.");
-        }   
-        */
-        return view('posts.show',compact('post'));                    
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        $this->authorize('update', $post);
-        $categories = Category::get();
-
-        return view('posts.edit',compact('post', 'categories'));
+        return response()->json($this->apiData);                   
     }
 
     /**
@@ -140,16 +113,25 @@ class PostApiController extends Controller
         ]);
         
         $postData = $request->only(['title', 'description']);
-        $post->update($postData);
+        $post = $this->postService->update($post, $postData);
 
-        $inputCategory = $request->input('category');
-        if($inputCategory) {
-            $categories = Category::whereIn('id', $inputCategory)->get();
-            $post->categories()->sync($categories);        
-        }        
-    
-        return redirect()->route('posts.index')
-                        ->with('success','Post updated successfully');
+        if($post) {
+
+            $inputCategory = $request->input('category');
+            if($inputCategory) {
+                $categories = $this->categoryService->whereInField('id', $inputCategory);
+                $post->categories()->sync($categories);        
+            }        
+        
+            $this->apiData["status"] = "success"; 
+            $this->apiData["message"] = 'Post updated successfully'; 
+            $this->apiData["data"] = $post; 
+        
+        } else {
+            $this->apiData["message"] = 'Error in deleting record.'; 
+        }
+
+        return response()->json($this->apiData);
     }
 
     /**
@@ -160,11 +142,14 @@ class PostApiController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('delete', $post);
 
-        $post->delete();
-    
-        return redirect()->route('posts.index')
-                        ->with('success','Post deleted successfully');
+        if($this->postService->delete($post)) {
+            $this->apiData["status"] = "success"; 
+            $this->apiData["message"] = 'Post deleted successfully'; 
+        } else {
+            $this->apiData["message"] = 'Error in deleting record.'; 
+        }
+
+        return response()->json($this->apiData);
     }
 }
