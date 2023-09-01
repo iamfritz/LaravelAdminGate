@@ -6,15 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class PostRequest extends FormRequest
+class AuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    /* public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
-    } */
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -23,35 +23,9 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
-        switch($this->method())
-        {
-            case 'POST':
-            {
-                return $this->createRules();
-            }
-            case 'PUT':
-            case 'PATCH':
-            {
-                return $this->updateRules();
-            }
-            default:break;
-        }         
-        return $this->createRules();
-    }
-
-    public function createRules(): array
-    {
         return [
-            'title' => 'required|unique:posts,title',
-            'description' => 'required',
-        ];
-    }
-
-    public function updateRules()
-    { 
-        return [
-            'title' => 'required|unique:posts,title,'.$this->post,
-            'description' => 'required',
+            'email' => 'required|string|email',
+            'password' => 'required|string',
         ];
     }
     
