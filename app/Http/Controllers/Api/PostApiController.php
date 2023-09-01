@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Post;
-use App\Models\Role;
-use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use App\Services\PostService;
 use App\Services\CategoryService;
+use App\Http\Requests\PostRequest;
+
 
 class PostApiController extends Controller
 {
@@ -48,18 +49,13 @@ class PostApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $this->authorize('create', Post::class);
-
-         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
-
+        //$this->authorize('create', Post::class);
 
         $postData = $request->only(['title', 'description']);
         $user = auth()->user(); //auth user
+        $user = User::find(5);
         $post = $this->postService->createWithAuthor($user, $postData);
 
         if($post) {
@@ -75,8 +71,10 @@ class PostApiController extends Controller
             $this->apiData["data"] = $post; 
         
         } else {
-            $this->apiData["message"] = 'Error in deleting record.'; 
+            $this->apiData["message"] = 'Error in updating record.'; 
         }
+
+        return response()->json($this->apiData); 
     }
 
     /**
@@ -102,16 +100,16 @@ class PostApiController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, $post)
     {
         
-        $this->authorize('update', $post);
+        /* $this->authorize('update', $post);
 
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-        ]);
-        
+        ]); */
+        return response()->json($this->apiData);
         $postData = $request->only(['title', 'description']);
         $post = $this->postService->update($post, $postData);
 
