@@ -47,6 +47,15 @@ class Handler extends ExceptionHandler
                     'message'   => 'Endpoint not found.'    
                 ], 404);
             }
-        });    
+        });
+
+        $this->renderable(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    "status"    => "error",
+                    'message' => 'Not authenticated'
+                ], 401);
+            }
+        });        
     }
 }

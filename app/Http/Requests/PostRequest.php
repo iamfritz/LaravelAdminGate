@@ -71,6 +71,11 @@ class PostRequest extends FormRequest
             'description.required' => 'The description field is required.',
             // Add more custom error messages here...
         ];
-    } */
+    } 
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln('METHOD');
+        $out->writeln($this->method());
+        $out->writeln($this->post);    
+    */
     
 }

@@ -96,13 +96,11 @@ class AuthController extends Controller
         return response()->json($this->apiData);        
     }
 
-    public function refresh()
+    public function refreshToken()
     {
-        $user = Auth::user();
-        /* $user->tokens()->each(function ($token, $key) {
-            $token->delete();
-        });  */       
+        $user = Auth::user(); 
         $user->tokens()->delete();
+        
         $newToken = $user->createToken('auth_token')->plainTextToken;
 
         $this->apiData["status"] = "success"; 
@@ -118,18 +116,12 @@ class AuthController extends Controller
         return response()->json($this->apiData);           
     }
 
-    public function userInfo()
+    public function me(Request $request)
     {   
         $user = Auth::user();
-        return response()->json($user);
+
         $this->apiData["status"] = "success"; 
-        $this->apiData["data"] = [
-                                    'user' => $user,
-                                    'authorization' => [
-                                        'token' => $user->currentAccessToken(),
-                                        'type' => 'bearer',
-                                    ]
-                                ]; 
+        $this->apiData["data"] = $user; 
 
         return response()->json($this->apiData);           
     }
