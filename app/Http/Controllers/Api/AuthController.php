@@ -39,7 +39,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             $this->apiData["status"] = "success"; 
-            $this->apiData["message"] = 'Registration Completed'; 
+            $this->apiData["message"] = 'Login Completed'; 
             $this->apiData["data"] = [
                                         'user' => $user,
                                         'authorization' => [
@@ -57,7 +57,13 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $apiKey = $request->header('X-Api-Key');
 
+        if ($apiKey) {
+            // API key authentication logic
+        } else {
+            // Standard registration logic (Sanctum)
+        }
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:255',
             'email'     => 'required|string|email|max:255|unique:users',

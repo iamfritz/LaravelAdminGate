@@ -79,7 +79,7 @@ git clone https://github.com/iamfritz/LaravelAdminGate
 
 Then cd into the folder with this command-
 ```
-cd S30-Laravel8
+cd LaravelAdminGate
 ```
 
 Then do a composer install
@@ -99,14 +99,13 @@ Then create a database named `laravel8` and then do a database migration using t
 php artisan migrate
 ```
 
-Then do database seeder RoleTableSeeder
+Then do database seeder RoleTableSeeder, UserTableSeeder, ApiDataSeeder
 ```
 php artisan db:seed --class=RoleTableSeeder
 ```
-
-Then do database seeder UserTableSeeder
-```
 php artisan db:seed --class=UserTableSeeder
+```
+php artisan db:seed --class=ApiDataSeeder
 ```
 
 Then do a npm install

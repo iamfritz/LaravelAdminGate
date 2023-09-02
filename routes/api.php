@@ -21,13 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
-    //Route::post('/register', [AuthController::class, 'register']);
-    //Route::post('/login', [AuthController::class, 'login']);
-    //Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');    
-    Route::controller(AuthController::class)->group(function () {
+    Route::controller(AuthController::class)->middleware(['api.key'])->group(function () {
         Route::post('login', 'login');
         Route::post('register', 'register');
     });
+    
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::get('/refreshtoken', [AuthController::class, 'refreshToken']);    
