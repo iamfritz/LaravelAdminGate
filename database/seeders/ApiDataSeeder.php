@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Apikey;
 
 class ApiDataSeeder extends Seeder
 {
@@ -14,8 +15,8 @@ class ApiDataSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('apikeys')->insert([
-            'key' => Str::random(40), // Generate a random API key
+        Apikey::create([
+            'key' => "1234abc5678", // Generate a random API key
             'user_id' => 1, // You can associate keys with users if needed
             'created_at' => now(),
             'updated_at' => now(),

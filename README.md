@@ -70,6 +70,41 @@ This is a simple Member app with multiple user role.
 
 This is built on Laravel Framework 8. This was built for demonstrate purpose.
 
+### Language & Framework Used:
+1. PHP-8
+1. Laravel-10
+
+### Architecture Used:
+1. Laravel 10.x
+1. Interface-Repository Pattern
+1. Model Based Eloquent Query
+1. Laravel API
+1. Laravel API Key
+1. Laravel Sanctum
+1. Laravel Gate and Policy
+1. Swagger API Documentation - https://github.com/DarkaOnLine/L5-Swagger
+1. JWT Auth - https://github.com/tymondesigns/jwt-auth
+1. PHP Unit Testing - Some basic unit testing added.
+
+### API List:
+##### Authentication Module
+1. [x] Register User with API Key
+1. [x] Login  with API Key to generate token
+1. [x] Authenticated User Profile
+1. [x] Refresh Data
+1. [x] Logout
+1. [x] Post
+1. [ ] Category
+1. [ ] User
+
+##### Product Module
+1. [x] Post List
+1. [ ] Post List [Public]
+1. [ ] Create Post
+1. [ ] Edit Post
+1. [ ] View Post
+1. [ ] Delete Post
+
 ## Installation
 
 Clone the repository-
@@ -101,11 +136,22 @@ php artisan migrate
 
 Then do database seeder RoleTableSeeder, UserTableSeeder, ApiDataSeeder
 ```
-php artisan db:seed --class=RoleTableSeeder
+php artisan migrate:refresh --seed
+
 ```
-php artisan db:seed --class=UserTableSeeder
+OR
+```
+php artisan db:seed --class=RolesDataSeeder
+```
+php artisan db:seed --class=UserDataSeeder
+```
+Default admin -  admin@hellofritz.com / password
 ```
 php artisan db:seed --class=ApiDataSeeder
+```
+Default API key - 1234abc5678
+```
+php artisan db:seed --class=PostCategoryDataSeeder
 ```
 
 Then do a npm install
