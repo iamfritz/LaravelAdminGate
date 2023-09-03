@@ -179,7 +179,7 @@ class UserController extends Controller
         if (Gate::denies('admin')) {
             abort(403, "You don't have permission to access.");
         }
-        //$user->delete();
+
         $this->userService->delete($user);
                     
             return redirect()->route('users.index')

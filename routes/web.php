@@ -26,3 +26,5 @@ Route::get('/dashboard', [App\Http\Controllers\UserController::class, 'dashboard
 Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');
 Route::resource('posts', PostController::class)->middleware('auth');
 Route::resource('category', App\Http\Controllers\CategoryController::class)->middleware('auth');
+Route::resource('apikey', App\Http\Controllers\ApikeyController::class)->middleware('auth');
+Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('auth');

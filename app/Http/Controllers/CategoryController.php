@@ -108,7 +108,7 @@ class CategoryController extends Controller
         ]);
         $catData = $request->only(['title']);
 
-        $this->categoryService->update($catData);
+        $this->categoryService->update($category, $catData);
     
         return redirect()->route('category.index')
                         ->with('success','Category updated successfully');

@@ -15,7 +15,7 @@ class PostCategoryDataSeeder extends Seeder
     public function run(): void
     {
         // Create 10 categories
-        $categories = Category::factory(2)->create();
+        $categories = Category::factory(10)->create();
         
         // Create 20 posts and attach 2 random categories to each post
         Post::factory(10)->create()->each(function ($post) use ($categories) {

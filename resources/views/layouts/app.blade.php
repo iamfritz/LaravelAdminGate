@@ -56,9 +56,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                             </li>  
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
-                            </li> 
+                            <li class="nav-item dropdown">                                
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ __('Users') }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
+                                    <a class="nav-link" href="{{ route('roles.index') }}">{{ __('Roles') }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item">User Module</a>
+                                </div>
+                            </li>  
                             <li class="nav-item dropdown">                                
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ __('Post') }}
@@ -76,7 +85,9 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">                                    
+                                    <a class="nav-link" href="{{ route('apikey.index') }}">{{ __('API Keys') }}</a>
+                                    <div class="dropdown-divider"></div>                                    
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

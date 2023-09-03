@@ -40,4 +40,8 @@ class BaseService
     {
         return $this->model->all();
     }
+    public function latest($paginate)
+    {
+        return $this->model->latest()->paginate($paginate);
+    }    
 }
