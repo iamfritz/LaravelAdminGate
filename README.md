@@ -168,6 +168,16 @@ php artisan serve
 
 Then go to `http://127.0.0.1:8000` from your browser and see the app.
 
+## Unit test
+
+```
+php artisan migrate:refresh --seed --env=testing
+```
+php artisan test --env=testing
+```
+
+
+
 ## Ask a question?
 
 If you have any query please contact at link4anything@gmail.com

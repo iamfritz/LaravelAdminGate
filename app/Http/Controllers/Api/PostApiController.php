@@ -67,14 +67,14 @@ class PostApiController extends Controller
             }       
         
             $this->apiData["status"] = "success"; 
-            $this->apiData["message"] = 'Post updated successfully'; 
+            $this->apiData["message"] = 'Post created successfully'; 
             $this->apiData["data"] = $post; 
         
         } else {
-            $this->apiData["message"] = 'Error in updating record.'; 
+            $this->apiData["message"] = 'Error in creating record.'; 
         }
 
-        return response()->json($this->apiData); 
+        return response()->json($this->apiData, 201); 
     }
 
     /**
@@ -141,7 +141,8 @@ class PostApiController extends Controller
     public function destroy(Post $post)
     {
 
-        if($this->postService->delete($post)) {
+        //if($this->postService->delete($post)) {
+        if($post->delete()) {
             $this->apiData["status"] = "success"; 
             $this->apiData["message"] = 'Post deleted successfully'; 
         } else {

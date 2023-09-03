@@ -26,15 +26,16 @@ Route::prefix('v1')->group(function () {
         Route::post('register', 'register');
     });
     
+    //Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::get('/refreshtoken', [AuthController::class, 'refreshToken']);    
         Route::get('/logout', [AuthController::class, 'logout']);
 
-        Route::apiResource('posts', App\Http\Controllers\Api\PostApiController::class);
         Route::apiResource('category', App\Http\Controllers\Api\PostApiController::class);
         Route::apiResource('users', App\Http\Controllers\Api\PostApiController::class);
         Route::apiResource('roles', App\Http\Controllers\Api\PostApiController::class);
+        Route::apiResource('posts', App\Http\Controllers\Api\PostApiController::class);
     });
 
 });
