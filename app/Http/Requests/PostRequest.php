@@ -11,10 +11,10 @@ class PostRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    /* public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
-    } */
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -47,7 +47,7 @@ class PostRequest extends FormRequest
         ];
     }
 
-    public function updateRules()
+    public function updateRules(): array
     { 
         return [
             'title' => 'required|unique:posts,title,'.$this->post,

@@ -34,11 +34,14 @@ class PostApiTest extends TestCase
 
     public function test_create_post()
     {
-        // Create a new Post using an API POST request
-        $response = $this->postJson('/api/v1/posts', [
+        // $newPost = Post::factory()->make();        
+        // $newPost = $newPost->toArray();
+        $newPost = [
             'title' => $this->faker->sentence." test",
             'description' => $this->faker->paragraph
-        ]);
+        ];
+        // Create a new Post using an API POST request
+        $response = $this->postJson('/api/v1/posts', $newPost);
 
         // Assert that the response status is HTTP 201 Created
         $response->assertStatus(201);
@@ -61,7 +64,7 @@ class PostApiTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /* public function test_update_post()
+    public function test_update_post()
     {
         // Create a Category and Post (you can use factory for this)
         $category = Category::factory()->create();
@@ -79,22 +82,23 @@ class PostApiTest extends TestCase
 
         // Assert that the response status is HTTP 200 OK
         $response->assertStatus(200);
-    } */
+    }
 
-    /* public function test_delete_post()
+    public function test_delete_post()
     {
         // Create a Category and Post (you can use factory for this)
         $category = Category::factory()->create();
-
+        $user = User::factory()->create();
+        
         $post = Post::factory()->create();
         $post->categories()->sync(
             $category->id
         );
 
         // Delete the Post using an API DELETE request
-        $response = $this->delete("/api/v1/posts/{$post->id}");
+        $response = $this->deleteJson("/api/v1/posts/{$post->id}");
 
         // Assert that the response status is HTTP 204 No Content
         $response->assertStatus(204);
-    } */
+    }
 }

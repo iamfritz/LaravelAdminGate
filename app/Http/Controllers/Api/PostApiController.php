@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Services\PostService;
 use App\Services\CategoryService;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Validator;
 
 
 class PostApiController extends Controller
@@ -54,15 +55,14 @@ class PostApiController extends Controller
         //$this->authorize('create', Post::class);
 
         $postData = $request->only(['title', 'description']);
-        $user = auth()->user(); //auth user
-        $user = User::find(5);
+        $user = auth()->user(); //auth user        
         $post = $this->postService->createWithAuthor($user, $postData);
 
         if($post) {
 
             $inputCategory = $request->input('category');
             if($inputCategory) {
-                $categories = $this->categoryService->whereInField('id', $inputCategory);
+                $categories = $this->categoryService->whereInField('title', $inputCategory);
                 $post->categories()->sync($categories);        
             }       
         
@@ -100,16 +100,20 @@ class PostApiController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, $post)
-    {
-        
-        /* $this->authorize('update', $post);
+    public function update(Request $request, Post $post)
+    {        
+        //$this->authorize('update', $post);
 
-        $request->validate([
-            'title' => 'required',
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:posts,title,'.$post->id,
             'description' => 'required',
-        ]); */
-        return response()->json($this->apiData);
+        ]);
+
+        if ($validator->fails()) {
+            $this->apiData['errors'] = $validator->errors(); //422
+            return response()->json($this->apiData);
+        } 
+
         $postData = $request->only(['title', 'description']);
         $post = $this->postService->update($post, $postData);
 
@@ -117,7 +121,7 @@ class PostApiController extends Controller
 
             $inputCategory = $request->input('category');
             if($inputCategory) {
-                $categories = $this->categoryService->whereInField('id', $inputCategory);
+                $categories = $this->categoryService->whereInField('title', $inputCategory);
                 $post->categories()->sync($categories);        
             }        
         
@@ -141,14 +145,13 @@ class PostApiController extends Controller
     public function destroy(Post $post)
     {
 
-        //if($this->postService->delete($post)) {
-        if($post->delete()) {
+        if($this->postService->delete($post)) {
             $this->apiData["status"] = "success"; 
             $this->apiData["message"] = 'Post deleted successfully'; 
         } else {
             $this->apiData["message"] = 'Error in deleting record.'; 
         }
 
-        return response()->json($this->apiData);
+        return response()->json($this->apiData, 204);
     }
 }
