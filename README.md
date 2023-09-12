@@ -176,6 +176,16 @@ php artisan migrate:refresh --seed --env=testing
 php artisan test --env=testing
 ```
 
+### Commands
+
+Create New User with Roles
+```
+hello:AddUser
+```
+```
+Select Roles
+Enter Name, Email Address and Password
+```
 
 
 ## Ask a question?
