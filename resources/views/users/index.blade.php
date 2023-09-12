@@ -4,11 +4,8 @@
 @section('content')
 <div class="container">
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p class="mb-0">{{ $message }}</p>
-        </div>
-    @endif
+    @include('sections.message')
+    
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
@@ -52,11 +49,7 @@
                         </tr>
                         @endforeach
                     </table>  
-                    <div class="mt-5">
-                        <div class="custom-pagination">
-                            {{ $users->links('pagination.custom') }}
-                        </div>                        
-                    </div>
+                    <div class="mt-5">{!! $users->links() !!}</div>
                 </div>
             </div>
         </div>

@@ -71,7 +71,7 @@ class PostController extends Controller
         $post = $this->postService->createWithAuthor($user, $postData);
 
         $inputCategory = $request->input('category');
-        if($inputCategory) {
+        if($post && $inputCategory) {
             $categories = $this->categoryService->whereInField('id', $inputCategory);
             $post->categories()->sync($categories);        
         }
@@ -140,7 +140,7 @@ class PostController extends Controller
         $post = $this->postService->update($post, $postData);
 
         $inputCategory = $request->input('category');
-        if($inputCategory) {
+        if($post && $inputCategory) {
             $categories = $this->categoryService->whereInField('id', $inputCategory);
             $post->categories()->sync($categories);        
         }        
