@@ -31,6 +31,36 @@ class AuthController extends Controller
                 ];        
     }
 
+    public function me(Request $request)
+    {   
+        $user = Auth::user();
+
+        $this->apiData["status"] = "success"; 
+        $this->apiData["data"] = $user; 
+
+        return response()->json($this->apiData);           
+    }
+
+    public function refreshToken()
+    {
+        $user = Auth::user(); 
+        $user->tokens()->delete();
+        
+        $newToken = $user->createToken('auth_token')->plainTextToken;
+
+        $this->apiData["status"] = "success"; 
+        $this->apiData["message"] = 'Refresh Token'; 
+        $this->apiData["data"] = [
+                                    'user' => $user,
+                                    'authorization' => [
+                                        'token' => $newToken,
+                                        'type' => 'bearer',
+                                    ]
+                                ]; 
+
+        return response()->json($this->apiData);           
+    }
+        
     public function login(AuthRequest $request)
     {
 
@@ -94,35 +124,5 @@ class AuthController extends Controller
         $this->apiData["message"] = 'Successfully logged out';         
         
         return response()->json($this->apiData);        
-    }
-
-    public function refreshToken()
-    {
-        $user = Auth::user(); 
-        $user->tokens()->delete();
-        
-        $newToken = $user->createToken('auth_token')->plainTextToken;
-
-        $this->apiData["status"] = "success"; 
-        $this->apiData["message"] = 'Refresh Token'; 
-        $this->apiData["data"] = [
-                                    'user' => $user,
-                                    'authorization' => [
-                                        'token' => $newToken,
-                                        'type' => 'bearer',
-                                    ]
-                                ]; 
-
-        return response()->json($this->apiData);           
-    }
-
-    public function me(Request $request)
-    {   
-        $user = Auth::user();
-
-        $this->apiData["status"] = "success"; 
-        $this->apiData["data"] = $user; 
-
-        return response()->json($this->apiData);           
     }
 }

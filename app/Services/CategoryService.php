@@ -28,4 +28,22 @@ class CategoryService extends BaseService
         return $this->model->whereIn($field, $values)->get();
     }
 
+    public function findInsert($categories)
+    {
+        $catIDs = [];
+        if($categories) {
+            foreach ($categories as $category) {
+                $newCategory = Category::firstOrCreate([
+                    'title' => $category
+                ]);
+                
+                if($newCategory) 
+                    $catIDs[] = $newCategory->id;                
+            }
+            //$categories = $this->model->whereInField('id', $catIDs);
+            
+            return $catIDs;
+        }
+    }    
+
 }

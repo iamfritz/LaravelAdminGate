@@ -61,20 +61,14 @@ class PostController extends Controller
         $this->authorize('create', Post::class);
 
          $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:posts,title',
             'description' => 'required',
         ]);
 
 
-        $postData = $request->only(['title', 'description']);
+        $postData = $request->only(['title', 'description', 'category']);
         $user = auth()->user();
         $post = $this->postService->createWithAuthor($user, $postData);
-
-        $inputCategory = $request->input('category');
-        if($post && $inputCategory) {
-            $categories = $this->categoryService->whereInField('id', $inputCategory);
-            $post->categories()->sync($categories);        
-        }
 
         return redirect()->route('posts.index')
                         ->with('success','Post created successfully.');
@@ -132,19 +126,13 @@ class PostController extends Controller
         $this->authorize('update', $post);
 
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:posts,title,'.$post->id,
             'description' => 'required',
         ]);
         
-        $postData = $request->only(['title', 'description']);
-        $post = $this->postService->update($post, $postData);
-
-        $inputCategory = $request->input('category');
-        if($post && $inputCategory) {
-            $categories = $this->categoryService->whereInField('id', $inputCategory);
-            $post->categories()->sync($categories);        
-        }        
-    
+        $postData = $request->only(['title', 'description', 'category']);
+        $post = $this->postService->updateWithCategory($post, $postData);
+           
         return redirect()->route('posts.index')
                         ->with('success','Post updated successfully');
     }

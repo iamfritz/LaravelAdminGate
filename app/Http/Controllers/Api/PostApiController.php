@@ -39,8 +39,7 @@ class PostApiController extends Controller
     {
 
         $paginate = 5;
-        $posts = $this->postService->latest($paginate);
-        
+        $posts = $this->postService->latestWithCategory($paginate);
         return response()->json($posts);
     }
 
@@ -54,18 +53,13 @@ class PostApiController extends Controller
     {
         //$this->authorize('create', Post::class);
 
-        $postData = $request->only(['title', 'description']);
+        $postData = $request->only(['title', 'description', 'category']);
         $user = auth()->user(); //auth user        
-        $post = $this->postService->createWithAuthor($user, $postData);
+        $post = $this->postService->createWithAuthor($user, $postData, 'title');
 
         if($post) {
-
-            $inputCategory = $request->input('category');
-            if($inputCategory) {
-                $categories = $this->categoryService->whereInField('title', $inputCategory);
-                $post->categories()->sync($categories);        
-            }       
-        
+            
+            $post = $this->postService->findWithCategory($post->id);
             $this->apiData["status"] = "success"; 
             $this->apiData["message"] = 'Post created successfully'; 
             $this->apiData["data"] = $post; 
@@ -86,6 +80,8 @@ class PostApiController extends Controller
     public function show(Post $post)
     {   
         if($post) {
+            $post = $this->postService->findWithCategory($post);
+
             $this->apiData["status"] = "success"; 
             $this->apiData["data"] = $post; 
         }
@@ -114,17 +110,11 @@ class PostApiController extends Controller
             return response()->json($this->apiData);
         } 
 
-        $postData = $request->only(['title', 'description']);
-        $post = $this->postService->update($post, $postData);
+        $postData = $request->only(['title', 'description', 'category']);
+        $post = $this->postService->updateWithCategory($post, $postData, 'title');
 
         if($post) {
-
-            $inputCategory = $request->input('category');
-            if($inputCategory) {
-                $categories = $this->categoryService->whereInField('title', $inputCategory);
-                $post->categories()->sync($categories);        
-            }        
-        
+            $post = $this->postService->findWithCategory($post->id);
             $this->apiData["status"] = "success"; 
             $this->apiData["message"] = 'Post updated successfully'; 
             $this->apiData["data"] = $post; 
