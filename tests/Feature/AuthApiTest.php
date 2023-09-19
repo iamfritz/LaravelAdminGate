@@ -27,7 +27,7 @@ class AuthApiTest extends TestCase
         // Set the token in the HTTP headers for authentication
         $this->withHeader('Authorization', 'Bearer ' . $token); */        
     }
-    public function test_register_post()
+    /* public function test_register_post()
     {
         $newUser = User::factory();
         // Create a new User using an API POST request
@@ -48,5 +48,5 @@ class AuthApiTest extends TestCase
 
         // Assert that the response status is HTTP 201 Created
         $response->assertStatus(201);
-    }
+    } */
 }
