@@ -18,20 +18,13 @@ class PostApiTest extends TestCase
     {
         parent::setUp();
 
-        /* $roles = Role::whereIn('name', ['user'])->get();
-        // Create a user and assign the Sanctum token to authenticate requests
-        $user = User::factory()->create()->each(function ($user) use ($roles) {
-            $user->roles()->sync($roles);
-        }); */
-        $user = User::factory()->create();
-        
+        $user = User::factory()->create();        
         //$this->actingAs($user, 'api');
         // Generate a token for the user
         $token = $user->createToken('test-token')->plainTextToken;        
         // Set the token in the HTTP headers for authentication
         $this->withHeader('Authorization', 'Bearer ' . $token);        
     }
-
     public function test_create_post()
     {
         // $newPost = Post::factory()->make();        
@@ -45,8 +38,7 @@ class PostApiTest extends TestCase
 
         // Assert that the response status is HTTP 201 Created
         $response->assertStatus(201);
-    }
-    
+    }    
     public function test_read_post()
     {
         // Create a Category and Post (you can use factory for this)
@@ -63,7 +55,6 @@ class PostApiTest extends TestCase
         // Assert that the response status is HTTP 200 OK
         $response->assertStatus(200);
     }
-
     public function test_update_post()
     {
         // Create a Category and Post (you can use factory for this)

@@ -96,14 +96,33 @@ This is built on Laravel Framework 8. This was built for demonstrate purpose.
 1. [x] Post
 1. [ ] Category
 1. [ ] User
+1. [ ] Todo
 
-##### Product Module
+##### Post Module
 1. [x] Post List
 1. [ ] Post List [Public]
 1. [ ] Create Post
 1. [ ] Edit Post
 1. [ ] View Post
 1. [ ] Delete Post
+
+##### Category Module
+1. [x] Category List
+1. [ ] Category List [Public]
+1. [ ] Create Category
+1. [ ] Edit Category
+1. [ ] View Category
+1. [ ] Delete Category
+
+##### Todo Module
+1. [ ] Todo List
+1. [ ] Create Todo
+1. [ ] Edit Todo
+1. [ ] View Todo by User Auth
+1. [ ] Delete Todo
+1. [ ] Permission CRUD, Status Change
+1. [ ] Assign Task
+
 
 ## Installation
 
