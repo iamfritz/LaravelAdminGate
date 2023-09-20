@@ -28,7 +28,7 @@ class PostApiTest extends TestCase
         // Set the token in the HTTP headers for authentication
         $this->withHeader('Authorization', 'Bearer ' . $token);     */    
     }
-    public function tesst_create_post()
+    public function test_create_post()
     {
         // $newPost = Post::factory()->make();        
         // $newPost = $newPost->toArray();
@@ -42,7 +42,11 @@ class PostApiTest extends TestCase
         // Assert that the response status is HTTP 201 Created
         $response->assertStatus(201);
 
+        //Assert that the response contains the given JSON data:
+        //$response->assertJson(['data' => ['name' => $newPost->title]]);
+
         $this->assertDatabaseHas('posts', $newPost);
+        
     }
 
     public function test_read_post()
@@ -70,6 +74,7 @@ class PostApiTest extends TestCase
     public function test_update_post()
     {
 
+        $user = User::factory()->create();
         // Create a Category and Post (you can use factory for this)
         $category = Category::factory()->create();
 
@@ -77,7 +82,9 @@ class PostApiTest extends TestCase
         $post->categories()->sync(
             $category->id
         );
-
+        echo $post->id;
+        echo $post->title;
+        echo "++++++++++++++++++++";
         $updatePost = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
@@ -91,7 +98,7 @@ class PostApiTest extends TestCase
         $this->assertDatabaseHas('posts', $updatePost);
     }
 
-    public function tesst_delete_post()
+    public function test_delete_post()
     {
    
         // Create a Category and Post (you can use factory for this)

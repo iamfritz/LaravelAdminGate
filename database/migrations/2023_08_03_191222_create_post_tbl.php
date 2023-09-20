@@ -15,7 +15,7 @@ class CreatePostTbl extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('title');
             $table->text('description');
             $table->timestamps();
@@ -23,7 +23,7 @@ class CreatePostTbl extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->nullOnDelete('cascade');
 
         });
     }
