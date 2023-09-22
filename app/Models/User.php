@@ -61,4 +61,14 @@ class User extends Authenticatable
         return $this->roles->pluck('name')->whereIn('name',['admin', 'author'])->count() > 0;
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'author_id', 'id');
+    }
+
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_to', 'id');
+    }    
+
 }
