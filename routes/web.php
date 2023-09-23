@@ -28,3 +28,4 @@ Route::resource('posts', PostController::class)->middleware('auth');
 Route::resource('category', App\Http\Controllers\CategoryController::class)->middleware('auth');
 Route::resource('apikey', App\Http\Controllers\ApikeyController::class)->middleware('auth');
 Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('auth');
+Route::resource('tasks', App\Http\Controllers\TaskController::class)->middleware('auth');

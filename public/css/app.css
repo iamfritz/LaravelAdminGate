@@ -11972,3 +11972,28 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+body .level-low {
+  background-color: #00aedb;
+}
+body .level-medium {
+  background-color: #ffc425;
+  color: #210b0b;
+}
+body .level-high {
+  background-color: #d11141;
+}
+body .status-todo {
+  background-color: #D4D8E6;
+}
+body .status-in-progress {
+  background-color: #E77268;
+}
+body .status-done {
+  background-color: #7CB7BF;
+}
+body .status-failed {
+  background-color: #FCBA02;
+}
+body .status-completed {
+  background-color: #03B89D;
+}

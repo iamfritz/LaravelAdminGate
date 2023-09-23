@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->text('level'); // low, medium, high
-            $table->text('status'); // pending, progress, done, completed
+            $table->string('status')->default('todo'); // todo, in-progress, done, failed, completed
             $table->timestamps();
 
             $table->foreign('assigned_to')
