@@ -32,10 +32,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/refreshtoken', [AuthController::class, 'refreshToken']);    
         Route::get('/logout', [AuthController::class, 'logout']);
 
-        Route::apiResource('category', App\Http\Controllers\Api\PostApiController::class);
         Route::apiResource('users', App\Http\Controllers\Api\PostApiController::class);
         Route::apiResource('roles', App\Http\Controllers\Api\PostApiController::class);
         Route::apiResource('posts', App\Http\Controllers\Api\PostApiController::class);
+        Route::apiResource('category', App\Http\Controllers\Api\PostApiController::class);
     });
-
+    
+    /* PUBLIC API */
+    #->except(['index', 'show']);/* not working */
+    Route::get('/posts', [App\Http\Controllers\Api\PostApiController::class, 'index']);
+    Route::get('/posts/{post}', [App\Http\Controllers\Api\PostApiController::class, 'show']);
 });

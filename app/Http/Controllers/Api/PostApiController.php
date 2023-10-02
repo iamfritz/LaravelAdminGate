@@ -37,7 +37,6 @@ class PostApiController extends Controller
      */
     public function index()
     {
-
         $paginate = 5;
         $posts = $this->postService->latestWithCategory($paginate);
         return response()->json($posts);
@@ -55,6 +54,7 @@ class PostApiController extends Controller
 
         $postData = $request->only(['title', 'description', 'category']);
         $user = auth()->user(); //auth user        
+        //create post under user auth and check category title exist
         $post = $this->postService->createWithAuthor($user, $postData, 'title');
 
         if($post) {

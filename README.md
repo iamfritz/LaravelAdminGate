@@ -96,15 +96,17 @@ This is built on Laravel Framework 8. This was built for demonstrate purpose.
 1. [x] Post
 1. [ ] Category
 1. [ ] User
-1. [ ] Todo
+1. [] Todo
 
-##### Post Module
+##### Post API Module
 1. [x] Post List
-1. [ ] Post List [Public]
-1. [ ] Create Post
-1. [ ] Edit Post
-1. [ ] View Post
-1. [ ] Delete Post
+1. [x] Post List [Public] <!-- except not working -->
+1. [x] Create Post
+1. [x] Create Post - findorcreate category field by title
+1. [x] Edit Post
+1. [x] View Post
+1. [x] Delete Post
+1. [ ] Post custom field - pending
 
 ##### Category Module
 1. [x] Category List
