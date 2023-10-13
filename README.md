@@ -85,6 +85,7 @@ This is built on Laravel Framework 8. This was built for demonstrate purpose.
 1. Swagger API Documentation - https://github.com/DarkaOnLine/L5-Swagger
 1. JWT Auth - https://github.com/tymondesigns/jwt-auth
 1. PHP Unit Testing - Some basic unit testing added.
+1. SweetAlert2
 
 ### API List:
 ##### Authentication Module
@@ -107,6 +108,7 @@ This is built on Laravel Framework 8. This was built for demonstrate purpose.
 1. [x] View Post
 1. [x] Delete Post
 1. [ ] Post custom field - pending
+1. [ ] Image field - pending
 
 ##### Category Module
 1. [x] Category List

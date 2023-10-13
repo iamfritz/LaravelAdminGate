@@ -29,10 +29,10 @@
                             <td>{{ $value->key }}</td>
                             <td class="text-center">
                                 @can('admin')
-                                <form action="{{ route('apikey.destroy',$value->id) }}" method="POST">                                       
+                                <form action="{{ route('apikey.destroy',$value->id) }}" method="POST" class="delete-form">                                       
                                     @csrf
                                     @method('DELETE')      
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" >Delete</button>
                                 </form>
                                 @endcan
                             </td>

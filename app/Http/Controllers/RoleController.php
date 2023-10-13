@@ -26,6 +26,7 @@ class RoleController extends Controller
     {
         $paginate = 5;
         $data = $this->roleService->latest($paginate);
+        //$data = Role::withCount('users')->latest()->paginate($paginate);
         
         return view('roles.index',compact('data'))
             ->with('i', (request()->input('page', 1) - 1) * $paginate);

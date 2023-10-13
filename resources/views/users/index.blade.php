@@ -36,13 +36,13 @@
                                 @endforelse                                  
                             </td>
                             <td class="text-center">
-                                <form action="{{ route('users.destroy',$user->id) }}" method="POST">   
+                                <form action="{{ route('users.destroy',$user->id) }}" method="POST" class="delete-form">   
                                     <a class="btn btn-info btn-sm" href="{{ route('users.show',$user->id) }}">Show</a>
                                     @can('admin')
                                         <a class="btn btn-primary btn-sm" href="{{ route('users.edit',$user->id) }}">Edit</a>   
                                         @csrf
                                         @method('DELETE')      
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     @endcan
                                 </form>
                             </td>

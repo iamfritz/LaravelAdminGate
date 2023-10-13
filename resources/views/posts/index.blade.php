@@ -37,12 +37,13 @@
                             </td>
                             <td>{{ \Str::limit($post->description, 100) }}</td>
                             <td class="text-center">
-                                <form action="{{ route('posts.destroy',$post->id) }}" method="POST">   
+                                <form action="{{ route('posts.destroy',$post->id) }}" method="POST" class="delete-form">   
                                     <a class="btn btn-info btn-sm" href="{{ route('posts.show',$post->id) }}">Show</a>    
                                     <a class="btn btn-primary btn-sm" href="{{ route('posts.edit',$post->id) }}">Edit</a>   
                                     @csrf
                                     @method('DELETE')      
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" >Delete</button>
+
                                 </form>
                             </td>
                         </tr>
@@ -53,5 +54,6 @@
             </div>
         </div>
     </div>
-</div>    
+</div>   
+
 @endsection
